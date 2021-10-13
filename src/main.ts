@@ -1,4 +1,5 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian'
+import { t } from './locales/helpers'
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -16,15 +17,15 @@ export default class MyPlugin extends Plugin {
 
 		await this.loadSettings();
 
-		this.addRibbonIcon('dice', 'Sample Plugin', () => {
-			new Notice('This is a notice!');
+		this.addRibbonIcon('dice', t('SamplePlugin'), () => {
+			new Notice('ThisIsANotice');
 		});
 
-		this.addStatusBarItem().setText('Status Bar Text');
+		this.addStatusBarItem().setText('StatusBarText');
 
 		this.addCommand({
 			id: 'open-sample-modal',
-			name: 'Open Sample Modal',
+			name: t('OpenSampleModal'),
 			// callback: () => {
 			// 	console.log('Simple Callback');
 			// },
@@ -73,7 +74,7 @@ class SampleModal extends Modal {
 
 	onOpen() {
 		let {contentEl} = this;
-		contentEl.setText('Woah!');
+		contentEl.setText(t('Woah!'));
 	}
 
 	onClose() {
@@ -95,16 +96,16 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+		containerEl.createEl('h2', {text: t('SettingsForMyAwesomePlugin')});
 
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
+			.setName(t('Setting1'))
+			.setDesc(t('ItsASecret'))
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
+				.setPlaceholder(t('EnterYourSecret'))
 				.setValue(this.plugin.settings.mySetting)
 				.onChange(async (value) => {
-					console.log('Secret: ' + value);
+					console.log(t('Secret')+ ': ' + value);
 					this.plugin.settings.mySetting = value;
 					await this.plugin.saveSettings();
 				}));
