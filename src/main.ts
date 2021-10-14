@@ -6,7 +6,7 @@ import CastView from  './castView'
 import { t } from './locales/helpers';
 
 export default class MyPlugin extends Plugin {
-	async onload() {
+	async load() {
 		this.registerView('asciicasts', (leaf: WorkspaceLeaf) => {
 			return new CastView(leaf)
 		})
@@ -19,7 +19,6 @@ export default class MyPlugin extends Plugin {
 		const playerCSSPath = path.resolve(pluginPath, 'lib', 'asciinema-player.css')
 		
 		// check
-		new Notice('检查数据...')
 		let playerJSContent = ''
 		let playerCSSContent = ''
 		try {
@@ -28,33 +27,33 @@ export default class MyPlugin extends Plugin {
 			fs.statSync(playerCSSPath)
 			playerCSSContent = fs.readFileSync(playerCSSPath).toString('utf-8')
 		} catch(err) {
-			new Notice('asciinema file corrupted', err)
+			new Notice('files of obsidian-asciinema-player is corrupted, please reinstall plugin to fix it', err)
 			console.error(err)
+		}
+
+		// css
+		const head = document.querySelectorAll('head')
+		if (head[0] && !document.getElementById('asciinema-player-css')) {
+			const css = document.createElement('link')
+			css.rel = 'stylesheet'
+			css.type = 'text/css'
+			css.innerHTML = playerCSSContent
+			css.id = 'asciinema-player-css'
+			head[0].appendChild(css)
+		}
+		// body
+		const body = document.querySelectorAll('body')
+		if (body[0] && !document.getElementById('asciinema-player-js') && (document.createElement('asciinema-player').constructor === HTMLUnknownElement || document.createElement('asciinema-player').constructor === HTMLElement)) {
+			const script = document.createElement('script')
+			script.innerHTML = playerJSContent
+			script.id = 'asciinema-player-js'
+			body[0].appendChild(script)
 		}
 
 		this.registerMarkdownPostProcessor((el: HTMLElement) => {
             el.querySelectorAll("img").forEach((img) => {
 				const matched = img.src.match(/asciinema:(?<filepath>.*\.cast)/)
 				if (matched) {
-					// css
-					const head = document.querySelectorAll('head')
-					if (head[0]) {
-						const css = document.createElement('link')
-						css.rel = 'stylesheet'
-						css.type = 'text/css'
-						css.innerHTML = playerCSSContent
-						css.id = 'asciinema-player-css'
-						head[0].appendChild(css)
-					}
-					// body
-					const body = document.querySelectorAll('body')
-					if (body[0] && (document.createElement('asciinema-player').constructor === HTMLUnknownElement || document.createElement('asciinema-player').constructor === HTMLElement)) {
-						const script = document.createElement('script')
-						script.innerHTML = playerJSContent
-						script.id = 'asciinema-player-js'
-						body[0].appendChild(script)
-					}
-
 					const allKnownFiles = this.app.vault.getFiles()
 					const allKnownFilePaths = allKnownFiles.map((file) => file.path)
 					const currentActiveFile = this.app.workspace.getActiveFile()
