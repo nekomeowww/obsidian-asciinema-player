@@ -6,9 +6,12 @@
     "module": "ESNext",
     "target": "es6",
     "allowJs": true,
+    "noEmit": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    // "outDir": "release",
     "lib": [
       "dom",
       "es5",
