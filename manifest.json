@@ -1,9 +1,9 @@
 {
 	"id": "obsidian-asciinema-player",
-	"name": "asciinema Player",
+	"name": "asciinema-player plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.9.12",
-	"description": "",
+	"description": "This is a Obsidian plugin which supports embedding asciicast files into Markdown files",
 	"author": "Ayaka Neko",
 	"authorUrl": "https://github.com/nekomeowww",
 	"isDesktopOnly": false
