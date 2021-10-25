@@ -1,3 +1,6 @@
+# vscode
+.vscode/
+
 # Intellij
 *.iml
 .idea
@@ -14,3 +17,5 @@ main.js
 data.json
 
 .DS_Store
+
+lib/
